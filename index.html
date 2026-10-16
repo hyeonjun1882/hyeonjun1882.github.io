@@ -1,0 +1,525 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Hyeonjun Lee</title>
+  <meta name="description" content="Hyeonjun Lee, applied research scientist at Lunit. Computer vision, multimodal models and agentic AI for medical imaging.">
+  <meta property="og:title" content="Hyeonjun Lee">
+  <meta property="og:description" content="Applied research scientist at Lunit. Computer vision, multimodal models and agentic AI.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+  <style>
+    /* ---------- Tokens ---------- */
+    :root {
+      --bg: #f5f6f7;          /* film light-box white, cool */
+      --surface: #ffffff;
+      --ink: #1a1d21;
+      --muted: #5d6570;
+      --rule: #dfe2e6;
+      --mark: #c8175d;        /* annotation magenta: the colour of a click */
+      --mark-soft: rgba(200, 23, 93, 0.35);
+      --link: #1a1d21;
+      --focus: #2a5bd7;
+      --measure: 42rem;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root:not([data-theme="light"]) {
+        --bg: #14171b;
+        --surface: #1b1f24;
+        --ink: #e8eaed;
+        --muted: #9aa3ad;
+        --rule: #2c323a;
+        --mark: #ff5c98;
+        --mark-soft: rgba(255, 92, 152, 0.4);
+        --link: #e8eaed;
+        --focus: #7fa2ff;
+      }
+    }
+    :root[data-theme="dark"] {
+      --bg: #14171b; --surface: #1b1f24; --ink: #e8eaed; --muted: #9aa3ad;
+      --rule: #2c323a; --mark: #ff5c98; --mark-soft: rgba(255, 92, 152, 0.4);
+      --link: #e8eaed; --focus: #7fa2ff;
+    }
+
+    /* ---------- Base ---------- */
+    *, *::before, *::after { box-sizing: border-box; }
+    html { -webkit-text-size-adjust: 100%; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: "Schibsted Grotesk", system-ui, -apple-system, "Segoe UI", sans-serif;
+      font-size: 1.0625rem;
+      line-height: 1.6;
+      font-feature-settings: "tnum" 0;
+    }
+    a { color: var(--link); text-decoration-color: var(--mark-soft); text-underline-offset: 0.18em; text-decoration-thickness: 1.5px; }
+    a:hover { text-decoration-color: var(--mark); }
+    a:focus-visible, summary:focus-visible, button:focus-visible {
+      outline: 2px solid var(--focus); outline-offset: 3px; border-radius: 2px;
+    }
+    .wrap { max-width: var(--measure); margin: 0 auto; padding: 0 1rem; }
+
+    /* ---------- Hero: the one bold element ---------- */
+    header.hero { padding: clamp(3.5rem, 12vw, 7rem) 0 2.5rem; }
+    .name-box { position: relative; display: inline-block; }
+    h1.name {
+      margin: 0;
+      font-size: clamp(3rem, 13vw, 6.25rem);
+      font-weight: 700;
+      line-height: 1;
+      letter-spacing: -0.035em;
+      white-space: nowrap;
+    }
+    .baseline-probe { display: inline-block; width: 0; height: 0; vertical-align: baseline; }
+    .xp-layer { position: absolute; inset: 0; pointer-events: none; overflow: visible; }
+    .xp-box {
+      position: absolute;
+      border: 1px dashed var(--mark-soft);
+      opacity: 0;
+      transition: opacity 400ms ease 520ms;
+    }
+    .xp-dot {
+      position: absolute;
+      width: 11px; height: 11px;
+      margin: -5.5px 0 0 -5.5px;
+      border-radius: 50%;
+      background: var(--mark);
+      box-shadow: 0 0 0 3px var(--bg);
+      transform: scale(0);
+      transition: transform 260ms cubic-bezier(.3, 1.6, .5, 1);
+    }
+    .xp-layer.on .xp-box { opacity: 1; }
+    .xp-layer.on .xp-dot { transform: scale(1); }
+    .xp-layer.on .xp-dot:nth-child(2) { transition-delay: 0ms; }
+    .xp-layer.on .xp-dot:nth-child(3) { transition-delay: 110ms; }
+    .xp-layer.on .xp-dot:nth-child(4) { transition-delay: 220ms; }
+    .xp-layer.on .xp-dot:nth-child(5) { transition-delay: 330ms; }
+    @media (prefers-reduced-motion: reduce) {
+      .xp-box, .xp-dot { transition: none !important; }
+    }
+    .xp-caption { margin: 1.4rem 0 0; font-size: 0.9rem; color: var(--muted); max-width: 30rem; }
+
+    .role { margin: 2rem 0 0; font-size: 1.3rem; line-height: 1.45; font-weight: 500; max-width: 34rem; }
+    .contact { margin: 1.25rem 0 0; padding: 0; list-style: none; display: flex; flex-wrap: wrap; gap: 0.4rem 1.4rem; font-size: 0.98rem; }
+
+    /* ---------- Sections ---------- */
+    main section { padding: 2.75rem 0 0.5rem; border-top: 1px solid var(--rule); margin-top: 2.25rem; }
+    h2 { margin: 0 0 1.25rem; font-size: 1.5rem; font-weight: 600; letter-spacing: -0.015em; line-height: 1.2; }
+    p { margin: 0 0 1rem; }
+    .muted { color: var(--muted); }
+
+    /* Publications */
+    .pubs { list-style: none; margin: 0; padding: 0; }
+    .pub { padding: 1.1rem 0; }
+    .pub + .pub { border-top: 1px solid var(--rule); }
+    .pub-title { font-weight: 600; font-size: 1.08rem; line-height: 1.35; margin: 0 0 0.3rem; }
+    .pub-authors { margin: 0; font-size: 0.97rem; color: var(--muted); }
+    .pub-authors .me { color: var(--ink); font-weight: 600; }
+    .pub-venue { margin: 0.15rem 0 0; font-size: 0.97rem; }
+    .pub-venue em { font-style: normal; font-weight: 500; }
+    .pub-note { margin: 0.35rem 0 0; font-size: 0.95rem; }
+    .pub-links { margin: 0.55rem 0 0; display: flex; flex-wrap: wrap; gap: 0.3rem 1.1rem; font-size: 0.95rem; align-items: baseline; }
+    details.bib summary {
+      cursor: pointer; color: var(--ink); text-decoration: underline;
+      text-decoration-color: var(--mark-soft); text-underline-offset: 0.18em; text-decoration-thickness: 1.5px;
+      list-style: none;
+    }
+    details.bib summary::-webkit-details-marker { display: none; }
+    details.bib[open] { flex-basis: 100%; }
+    .bib-body { position: relative; margin-top: 0.6rem; }
+    .bib-body pre {
+      margin: 0; padding: 0.9rem 1rem; background: var(--surface); border: 1px solid var(--rule); border-radius: 6px;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 0.8rem; line-height: 1.5;
+      overflow-x: auto; white-space: pre;
+    }
+    .copy {
+      position: absolute; top: 0.45rem; right: 0.45rem;
+      font: inherit; font-size: 0.8rem; padding: 0.2rem 0.6rem; border-radius: 4px;
+      border: 1px solid var(--rule); background: var(--bg); color: var(--ink); cursor: pointer;
+    }
+    .fineprint { font-size: 0.9rem; color: var(--muted); margin-top: 0.75rem; }
+
+    /* Timeline (experience, education): dates are a real sequence */
+    .tl { list-style: none; margin: 0; padding: 0; }
+    .tl > li { display: grid; grid-template-columns: 10rem 1fr; gap: 0 1.25rem; padding: 0.9rem 0; }
+    .tl > li + li { border-top: 1px solid var(--rule); }
+    .tl .when { color: var(--muted); font-size: 0.93rem; font-variant-numeric: tabular-nums; padding-top: 0.12rem; }
+    .tl h3 { margin: 0; font-size: 1.04rem; font-weight: 600; line-height: 1.35; }
+    .tl .where { margin: 0.05rem 0 0; color: var(--muted); font-size: 0.97rem; }
+    .tl ul { margin: 0.6rem 0 0; padding-left: 1.1rem; }
+    .tl ul li { margin: 0.35rem 0; font-size: 0.98rem; }
+    .tl ul li::marker { color: var(--mark); }
+
+    .plain { list-style: none; margin: 0; padding: 0; }
+    .plain li { margin: 0.35rem 0; }
+
+    footer { border-top: 1px solid var(--rule); margin-top: 3rem; padding: 1.5rem 0 3rem; font-size: 0.9rem; color: var(--muted); display: flex; justify-content: space-between; gap: 1rem; flex-wrap: wrap; }
+    .theme-toggle { font: inherit; font-size: 0.9rem; background: none; border: 0; padding: 0; color: var(--muted); cursor: pointer; text-decoration: underline; text-underline-offset: 0.18em; }
+
+    @media (max-width: 560px) {
+      body { font-size: 1rem; }
+      .role { font-size: 1.15rem; }
+      .tl > li { grid-template-columns: 1fr; }
+      .tl .when { padding: 0 0 0.2rem; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header class="hero">
+      <div class="name-box" id="nameBox">
+        <h1 class="name" id="name">Hyeonjun Lee<span class="baseline-probe" id="probe" aria-hidden="true"></span></h1>
+        <div class="xp-layer" id="xp" aria-hidden="true"></div>
+      </div>
+      <p class="xp-caption">The four dots sit on the extreme points of my name: the topmost, leftmost, bottommost and rightmost pixels. My <a href="#pub-exits">CVPR 2024 paper</a> learns instance masks from exactly these four clicks.</p>
+
+      <p class="role">Applied research scientist at Lunit in Seoul, building AI for breast cancer screening. Computer vision, multimodal models and LLM agents.</p>
+      <ul class="contact">
+        <li><a href="mailto:dlguswns1882@gmail.com">dlguswns1882@gmail.com</a></li>
+        <li><a href="https://scholar.google.com/citations?user=WmqRQ3cAAAAJ">Google Scholar</a></li>
+        <!-- TODO: fill in and uncomment
+        <li><a href="https://github.com/YOUR-GITHUB">GitHub</a></li>
+        <li><a href="https://www.linkedin.com/in/YOUR-LINKEDIN">LinkedIn</a></li>
+        <li><a href="cv.pdf">CV (PDF)</a></li>
+        -->
+      </ul>
+    </header>
+
+    <main>
+      <section id="about" aria-labelledby="about-h">
+        <h2 id="about-h">About</h2>
+        <p>I work on medical imaging AI for mammography in Lunit's Cancer Screening Group. My background is computer vision, especially label-efficient segmentation and detection. Over the past two years my work has moved into multimodal models: pre-training vision-language models on mammogram and report pairs, and fine-tuning multimodal LLMs with LoRA and GRPO. I also build LLM agent systems, including a multi-agent assistant that answers internal questions about our models and datasets.</p>
+        <p>The problems I enjoy most are the ones where a model meets messy real data and has to be measured honestly: learning from cheap labels, finding where foundation models fail, and making agent failures visible instead of silent. I'm currently most interested in multimodal learning, reinforcement fine-tuning of MLLMs, agentic systems and physical AI.</p>
+        <p>Before Lunit, I did my M.S. at POSTECH in the <a href="https://cvlab.postech.ac.kr/">Computer Vision Lab</a> with Prof. Suha Kwak.</p>
+      </section>
+
+      <section id="publications" aria-labelledby="pubs-h">
+        <h2 id="pubs-h">Publications</h2>
+        <ol class="pubs" reversed>
+
+          <li class="pub" id="pub-dualmoe">
+            <p class="pub-title">Dual Mixture-of-Experts Framework for Discrete-Time Survival Analysis</p>
+            <p class="pub-authors"><span class="me">Hyeonjun Lee</span>, Hyungseob Shin, Gunhee Nam, Hyeonsoo Lee</p>
+            <p class="pub-venue"><em>NeurIPS 2025 Workshop on Learning from Time Series for Health (TS4H)</em></p>
+            <div class="pub-links">
+              <a href="https://arxiv.org/abs/2510.26014">arXiv</a>
+              <a href="https://arxiv.org/pdf/2510.26014">PDF</a>
+              <a href="https://neurips.cc/virtual/2025/132359">NeurIPS page</a>
+              <details class="bib"><summary>BibTeX</summary>
+<div class="bib-body"><button class="copy" type="button">Copy</button><pre>@inproceedings{lee2025dualmoe,
+  title     = {Dual Mixture-of-Experts Framework for Discrete-Time Survival Analysis},
+  author    = {Lee, Hyeonjun and Shin, Hyungseob and Nam, Gunhee and Lee, Hyeonsoo},
+  booktitle = {NeurIPS 2025 Workshop on Learning from Time Series for Health (TS4H)},
+  year      = {2025},
+  eprint    = {2510.26014},
+  archivePrefix = {arXiv}
+}</pre></div></details>
+            </div>
+          </li>
+
+          <li class="pub" id="pub-mvmlm">
+            <p class="pub-title">MV-MLM: Bridging Multi-View Mammography and Language for Breast Cancer Diagnosis and Risk Prediction</p>
+            <p class="pub-authors">Shunjie-Fabian Zheng, <span class="me">Hyeonjun Lee</span>, Thijs Kooi, Ali Diba</p>
+            <p class="pub-venue"><em>ICCV 2025 Workshop on Computer Vision for Automated Medical Diagnosis (CVAMD)</em></p>
+            <div class="pub-links">
+              <a href="https://arxiv.org/abs/2510.26151">arXiv</a>
+              <a href="https://arxiv.org/pdf/2510.26151">PDF</a>
+              <details class="bib"><summary>BibTeX</summary>
+<div class="bib-body"><button class="copy" type="button">Copy</button><pre>@inproceedings{zheng2025mvmlm,
+  title     = {MV-MLM: Bridging Multi-View Mammography and Language for Breast Cancer Diagnosis and Risk Prediction},
+  author    = {Zheng, Shunjie-Fabian and Lee, Hyeonjun and Kooi, Thijs and Diba, Ali},
+  booktitle = {ICCV 2025 Workshop on Computer Vision for Automated Medical Diagnosis (CVAMD)},
+  year      = {2025},
+  eprint    = {2510.26151},
+  archivePrefix = {arXiv}
+}</pre></div></details>
+            </div>
+          </li>
+
+          <li class="pub" id="pub-bcvlm">
+            <p class="pub-title">Breast Cancer VLMs: Clinically Practical Vision-Language Train-Inference Models</p>
+            <p class="pub-authors">Shunjie-Fabian Zheng, <span class="me">Hyeonjun Lee</span>, Thijs Kooi, Ali Diba</p>
+            <p class="pub-venue"><em>ICCV 2025 Workshop on Computer Vision for Automated Medical Diagnosis (CVAMD)</em></p>
+            <div class="pub-links">
+              <a href="https://arxiv.org/abs/2510.25051">arXiv</a>
+              <a href="https://arxiv.org/pdf/2510.25051">PDF</a>
+              <details class="bib"><summary>BibTeX</summary>
+<div class="bib-body"><button class="copy" type="button">Copy</button><pre>@inproceedings{zheng2025bcvlm,
+  title     = {Breast Cancer VLMs: Clinically Practical Vision-Language Train-Inference Models},
+  author    = {Zheng, Shunjie-Fabian and Lee, Hyeonjun and Kooi, Thijs and Diba, Ali},
+  booktitle = {ICCV 2025 Workshop on Computer Vision for Automated Medical Diagnosis (CVAMD)},
+  year      = {2025},
+  eprint    = {2510.25051},
+  archivePrefix = {arXiv}
+}</pre></div></details>
+            </div>
+          </li>
+
+          <li class="pub" id="pub-exits">
+            <p class="pub-title">Extreme Point Supervised Instance Segmentation</p>
+            <p class="pub-authors"><span class="me">Hyeonjun Lee</span>, Sehyun Hwang, Suha Kwak</p>
+            <p class="pub-venue"><em>IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR) 2024</em></p>
+            <p class="pub-note muted">Learns instance masks from the four extreme points annotators already click when drawing a bounding box, at no extra labeling cost.</p>
+            <div class="pub-links">
+              <a href="https://openaccess.thecvf.com/content/CVPR2024/html/Lee_Extreme_Point_Supervised_Instance_Segmentation_CVPR_2024_paper.html">Paper</a>
+              <a href="https://openaccess.thecvf.com/content/CVPR2024/papers/Lee_Extreme_Point_Supervised_Instance_Segmentation_CVPR_2024_paper.pdf">PDF</a>
+              <a href="https://arxiv.org/abs/2405.20729">arXiv</a>
+              <details class="bib"><summary>BibTeX</summary>
+<div class="bib-body"><button class="copy" type="button">Copy</button><pre>@InProceedings{Lee_2024_CVPR,
+  author    = {Lee, Hyeonjun and Hwang, Sehyun and Kwak, Suha},
+  title     = {Extreme Point Supervised Instance Segmentation},
+  booktitle = {Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR)},
+  month     = {June},
+  year      = {2024},
+  pages     = {17212-17222}
+}</pre></div></details>
+            </div>
+          </li>
+
+          <li class="pub" id="pub-gsrtr">
+            <p class="pub-title">Grounded Situation Recognition with Transformers</p>
+            <p class="pub-authors">Junhyeong Cho*, Youngseok Yoon*, <span class="me">Hyeonjun Lee*</span>, Suha Kwak</p>
+            <p class="pub-venue"><em>British Machine Vision Conference (BMVC) 2021</em></p>
+            <div class="pub-links">
+              <a href="https://www.bmva-archive.org.uk/bmvc/2021/assets/papers/0745.pdf">PDF</a>
+              <a href="https://arxiv.org/abs/2111.10135">arXiv</a>
+              <a href="https://github.com/jhcho99/gsrtr">Code</a>
+              <details class="bib"><summary>BibTeX</summary>
+<div class="bib-body"><button class="copy" type="button">Copy</button><pre>@inproceedings{cho2021gsrtr,
+  title     = {Grounded Situation Recognition with Transformers},
+  author    = {Cho, Junhyeong and Yoon, Youngseok and Lee, Hyeonjun and Kwak, Suha},
+  booktitle = {British Machine Vision Conference (BMVC)},
+  year      = {2021}
+}</pre></div></details>
+            </div>
+          </li>
+        </ol>
+        <p class="fineprint">* Equal contribution. Full list on <a href="https://scholar.google.com/citations?user=WmqRQ3cAAAAJ">Google Scholar</a>.</p>
+      </section>
+
+      <section id="experience" aria-labelledby="exp-h">
+        <h2 id="exp-h">Experience</h2>
+        <ol class="tl">
+          <li>
+            <div class="when">Feb 2024 – now</div>
+            <div>
+              <h3>Applied Research Scientist</h3>
+              <p class="where">Cancer Screening Group, <a href="https://www.lunit.io/en">Lunit</a>, Seoul</p>
+              <ul>
+                <li>Building a production mammography positioning quality assessment model (PGMI) based on anatomical landmark detection, from model development through deployment.</li>
+                <li>Benchmarked foundation MLLMs (GPT-5.2, Qwen3-VL, MedGemma and others) zero-shot on image quality assessment; all stayed below Cohen's κ 0.2. Fine-tuning with LoRA SFT and GRPO raised κ by 0.14 over the zero-shot baseline.</li>
+                <li>Co-developed CLIP-style vision-language models on 500K mammogram and report pairs, improving cancer classification AUC from 0.73 to 0.78 and 5-year risk prediction AUC from 0.65 to 0.69 over supervised baselines.</li>
+                <li>Building an LLM multi-agent system that answers questions from QA, regulatory and medical affairs teams about our models and datasets, routing to sub-agents for tool-based database retrieval and Confluence search.</li>
+                <li>Designed a dual mixture-of-experts survival model, improving C-index by up to 0.04 over strong baselines.</li>
+              </ul>
+            </div>
+          </li>
+          <li>
+            <div class="when">Mar 2021 – Feb 2024</div>
+            <div>
+              <h3>Graduate Researcher</h3>
+              <p class="where">Computer Vision Lab, POSTECH</p>
+              <ul>
+                <li>Label-efficient instance segmentation and grounded situation recognition.</li>
+              </ul>
+            </div>
+          </li>
+          <li>
+            <div class="when">Dec 2019 – Feb 2020</div>
+            <div>
+              <h3>AI Engineering Intern</h3>
+              <p class="where">SK Hynix</p>
+              <ul><li>Automated critical-dimension measurement of semiconductor images with segmentation.</li></ul>
+            </div>
+          </li>
+          <li>
+            <div class="when">Jul – Aug 2019</div>
+            <div>
+              <h3>Research Intern</h3>
+              <p class="where">Music and Audio Research Group, Seoul National University</p>
+              <ul><li>U-Net based source separation to isolate vocals from instrumental tracks.</li></ul>
+            </div>
+          </li>
+          <li>
+            <div class="when">Mar – Aug 2018</div>
+            <div>
+              <h3>Software Engineer Intern</h3>
+              <p class="where">Tech Labs</p>
+              <ul><li>Backend API servers for mobile apps with Ruby on Rails.</li></ul>
+            </div>
+          </li>
+        </ol>
+      </section>
+
+      <section id="education" aria-labelledby="edu-h">
+        <h2 id="edu-h">Education</h2>
+        <ol class="tl">
+          <li>
+            <div class="when">2021 – 2024</div>
+            <div>
+              <h3>M.S., Graduate School of Artificial Intelligence</h3>
+              <p class="where">POSTECH. Advisor: Prof. Suha Kwak. Thesis: Extreme Point Supervised Instance Segmentation.</p>
+            </div>
+          </li>
+          <li>
+            <div class="when">2018 – 2019</div>
+            <div>
+              <h3>Exchange student, Computer Science</h3>
+              <p class="where">TU Berlin</p>
+            </div>
+          </li>
+          <li>
+            <div class="when">2015 – 2020</div>
+            <div>
+              <h3>B.S., Computer Science and Engineering</h3>
+              <p class="where">POSTECH</p>
+            </div>
+          </li>
+        </ol>
+      </section>
+
+      <section id="service" aria-labelledby="svc-h">
+        <h2 id="svc-h">Service and awards</h2>
+        <ul class="plain">
+          <li>Reviewer for ICPR 2024, NeurIPS 2025, IEEE TPAMI and MICCAI 2026</li>
+          <li>Excellence Prize (4th place), AI Diabetes Datathon, 2021</li>
+        </ul>
+      </section>
+
+      <section id="writing" aria-labelledby="wr-h">
+        <h2 id="wr-h">Writing</h2>
+        <p class="muted">Notes on building and evaluating multimodal models and agents. No posts yet.</p>
+        <!-- Post template:
+        <ul class="plain">
+          <li><a href="posts/my-first-post.html">Post title</a> <span class="muted">(Month YYYY)</span></li>
+        </ul>
+        -->
+      </section>
+    </main>
+
+    <footer>
+      <span>Hyeonjun Lee, 2026</span>
+      <button class="theme-toggle" id="themeToggle" type="button">Switch to dark theme</button>
+    </footer>
+  </div>
+
+  <script>
+    /* Extreme points of the rendered name, found by scanning its pixels. */
+    (function () {
+      var h1 = document.getElementById('name');
+      var probe = document.getElementById('probe');
+      var box = document.getElementById('nameBox');
+      var layer = document.getElementById('xp');
+      var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      function draw(animate) {
+        var cs = getComputedStyle(h1);
+        var text = h1.textContent;
+        var dpr = Math.min(window.devicePixelRatio || 1, 2);
+        var c = document.createElement('canvas');
+        var ctx = c.getContext('2d', { willReadFrequently: true });
+        if (!ctx) return;
+        var font = cs.fontStyle + ' ' + cs.fontWeight + ' ' + cs.fontSize + ' ' + cs.fontFamily;
+        ctx.font = font;
+        if ('letterSpacing' in ctx) ctx.letterSpacing = cs.letterSpacing;
+        var m = ctx.measureText(text);
+        var asc = Math.ceil(m.actualBoundingBoxAscent || parseFloat(cs.fontSize));
+        var desc = Math.ceil(m.actualBoundingBoxDescent || 0);
+        var pad = 4;
+        var w = Math.ceil(m.width) + pad * 2 + Math.ceil(m.actualBoundingBoxRight - m.width > 0 ? m.actualBoundingBoxRight - m.width : 0);
+        var h = asc + desc + pad * 2;
+        c.width = Math.ceil(w * dpr); c.height = Math.ceil(h * dpr);
+        ctx.scale(dpr, dpr);
+        ctx.font = font;
+        if ('letterSpacing' in ctx) ctx.letterSpacing = cs.letterSpacing;
+        ctx.fillStyle = '#000';
+        ctx.textBaseline = 'alphabetic';
+        ctx.fillText(text, pad, pad + asc);
+
+        var W = c.width, H = c.height;
+        var data = ctx.getImageData(0, 0, W, H).data;
+        var T = 128;
+        function on(x, y) { return data[(y * W + x) * 4 + 3] > T; }
+        function midRun(list) { return list[Math.floor(list.length / 2)]; }
+
+        var top = null, bottom = null, left = null, right = null, x, y, hits;
+        for (y = 0; y < H && !top; y++) { hits = []; for (x = 0; x < W; x++) if (on(x, y)) hits.push(x); if (hits.length) top = [midRun(hits), y]; }
+        for (y = H - 1; y >= 0 && !bottom; y--) { hits = []; for (x = 0; x < W; x++) if (on(x, y)) hits.push(x); if (hits.length) bottom = [midRun(hits), y]; }
+        for (x = 0; x < W && !left; x++) { hits = []; for (y = 0; y < H; y++) if (on(x, y)) hits.push(y); if (hits.length) left = [x, midRun(hits)]; }
+        for (x = W - 1; x >= 0 && !right; x--) { hits = []; for (y = 0; y < H; y++) if (on(x, y)) hits.push(y); if (hits.length) right = [x, midRun(hits)]; }
+        if (!top || !bottom || !left || !right) return;
+
+        /* Map canvas pixels onto the heading: baseline from the probe, x from the heading's left edge. */
+        var boxR = box.getBoundingClientRect();
+        var probeR = probe.getBoundingClientRect();
+        var h1R = h1.getBoundingClientRect();
+        var baseY = probeR.bottom - boxR.top;
+        var originX = h1R.left - boxR.left + parseFloat(cs.paddingLeft || 0);
+        function map(p) { return [originX + p[0] / dpr - pad, baseY - (pad + asc - p[1] / dpr)]; }
+        var pts = [top, left, bottom, right].map(map);
+
+        layer.innerHTML = '';
+        var rect = document.createElement('div');
+        rect.className = 'xp-box';
+        rect.style.left = pts[1][0] + 'px';
+        rect.style.top = pts[0][1] + 'px';
+        rect.style.width = (pts[3][0] - pts[1][0]) + 'px';
+        rect.style.height = (pts[2][1] - pts[0][1]) + 'px';
+        layer.appendChild(rect);
+        pts.forEach(function (p) {
+          var d = document.createElement('span');
+          d.className = 'xp-dot';
+          d.style.left = p[0] + 'px';
+          d.style.top = p[1] + 'px';
+          layer.appendChild(d);
+        });
+        if (animate && !reduce) {
+          layer.classList.remove('on');
+          requestAnimationFrame(function () { requestAnimationFrame(function () { layer.classList.add('on'); }); });
+        } else {
+          layer.classList.add('on');
+        }
+      }
+
+      var ready = document.fonts && document.fonts.ready ? document.fonts.ready : Promise.resolve();
+      ready.then(function () { setTimeout(function () { draw(true); }, 250); });
+      var t;
+      window.addEventListener('resize', function () { clearTimeout(t); t = setTimeout(function () { draw(false); }, 150); });
+      window.__redrawExtremePoints = function () { draw(false); };
+    })();
+
+    /* BibTeX copy buttons */
+    document.querySelectorAll('.copy').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var text = btn.nextElementSibling.textContent;
+        var done = function () { btn.textContent = 'Copied'; setTimeout(function () { btn.textContent = 'Copy'; }, 1500); };
+        if (navigator.clipboard) navigator.clipboard.writeText(text).then(done, function () {});
+      });
+    });
+
+    /* Theme toggle, remembered per browser */
+    (function () {
+      var root = document.documentElement;
+      var btn = document.getElementById('themeToggle');
+      function current() {
+        var t = root.getAttribute('data-theme');
+        if (t) return t;
+        return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+      }
+      function label() { btn.textContent = current() === 'dark' ? 'Switch to light theme' : 'Switch to dark theme'; }
+      try { var saved = localStorage.getItem('theme'); if (saved) root.setAttribute('data-theme', saved); } catch (e) {}
+      label();
+      btn.addEventListener('click', function () {
+        var next = current() === 'dark' ? 'light' : 'dark';
+        root.setAttribute('data-theme', next);
+        try { localStorage.setItem('theme', next); } catch (e) {}
+        label();
+        if (window.__redrawExtremePoints) window.__redrawExtremePoints();
+      });
+    })();
+  </script>
+</body>
+</html>
